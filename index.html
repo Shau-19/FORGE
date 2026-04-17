@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE — AI Project Launch Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══ LAUNCH SCREEN ════════════════════════════════════════ -->
+<div id="launchScreen">
+  <div class="ls-grid"></div>
+  <div class="ls-glow"></div>
+  <div class="ls-inner">
+    <div class="ls-logo">
+      <svg width="56" height="56" viewBox="0 0 52 52" fill="none">
+        <polygon points="26,3 49,15.5 49,36.5 26,49 3,36.5 3,15.5" stroke="#6366f1" stroke-width="1.5" fill="#6366f108"/>
+        <polygon points="26,13 39,20 39,32 26,39 13,32 13,20" fill="#6366f1" opacity="0.5"/>
+        <circle cx="26" cy="26" r="5" fill="#6366f1"/>
+      </svg>
+    </div>
+    <div class="ls-wordmark">FORGE</div>
+    <div class="ls-tagline">AI Project Launch Suite</div>
+    <div class="ls-boot" id="lsBoot"></div>
+    <button class="ls-start" id="lsStartBtn" onclick="startApp()" disabled>
+      <span id="lsStartTxt">Initializing…</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <div class="ls-ver">v1.0 &nbsp;·&nbsp; Phase 4 &nbsp;·&nbsp; Powered by Groq</div>
+  </div>
+</div>
+
+<!-- ══ APP SHELL ════════════════════════════════════════════ -->
+<div id="appShell">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+  <aside id="sidebar">
+    <div class="sb-brand">
+      <svg width="22" height="22" viewBox="0 0 52 52" fill="none">
+        <polygon points="26,3 49,15.5 49,36.5 26,49 3,36.5 3,15.5" stroke="#6366f1" stroke-width="2" fill="#6366f108"/>
+        <polygon points="26,13 39,20 39,32 26,39 13,32 13,20" fill="#6366f1" opacity="0.6"/>
+        <circle cx="26" cy="26" r="4" fill="#6366f1"/>
+      </svg>
+      <span class="sb-brand-name">FORGE</span>
+      <span class="sb-brand-ver">v1.0</span>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section-label">PIPELINE</div>
+
+      <div class="sb-item active" data-panel="validate" onclick="App.switchPanel('validate',this)">
+        <div class="sb-num">01</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">Idea Validator</div>
+          <div class="sb-item-sub">Score viability &amp; market fit</div>
+        </div>
+        <div class="sb-status-dot" id="tdot-validate"></div>
+        <div class="sb-check-wrap"><div class="sb-check" id="pipe-validate"></div></div>
+      </div>
+
+      <div class="sb-item" data-panel="prd" onclick="App.switchPanel('prd',this)">
+        <div class="sb-num">02</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">PRD Generator</div>
+          <div class="sb-item-sub">Product requirements doc</div>
+        </div>
+        <div class="sb-status-dot" id="tdot-prd"></div>
+        <div class="sb-check-wrap"><div class="sb-check" id="pipe-prd"></div></div>
+      </div>
+
+      <div class="sb-item" data-panel="scaffold" onclick="App.switchPanel('scaffold',this)">
+        <div class="sb-num">03</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">Code Scaffold</div>
+          <div class="sb-item-sub">Generate repo structure</div>
+        </div>
+        <div class="sb-status-dot" id="tdot-scaffold"></div>
+        <div class="sb-check-wrap"><div class="sb-check" id="pipe-scaffold"></div></div>
+      </div>
+
+      <div class="sb-item" data-panel="cicd" onclick="App.switchPanel('cicd',this)">
+        <div class="sb-num">04</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">CI/CD Monitor</div>
+          <div class="sb-item-sub">Pipeline &amp; auto-fix</div>
+        </div>
+        <div class="sb-status-dot" id="tdot-cicd"></div>
+        <div class="sb-check-wrap"><div class="sb-check" id="pipe-cicd"></div></div>
+      </div>
+
+      <div class="sb-item" data-panel="launch" onclick="App.switchPanel('launch',this)">
+        <div class="sb-num">05</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">Launch Checklist</div>
+          <div class="sb-item-sub">Pre-launch readiness</div>
+        </div>
+        <div class="sb-status-dot" id="tdot-launch"></div>
+        <div class="sb-check-wrap"><div class="sb-check" id="pipe-launch"></div></div>
+      </div>
+
+      <div class="sb-section-label" style="margin-top:20px;">VISUALIZE</div>
+
+      <div class="sb-item" data-panel="diagram" onclick="App.switchPanel('diagram',this)">
+        <div class="sb-icon">◇</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">Architecture</div>
+          <div class="sb-item-sub">AI diagram editor</div>
+        </div>
+      </div>
+
+      <div class="sb-item" data-panel="graph" onclick="App.switchPanel('graph',this)">
+        <div class="sb-icon">◈</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">Knowledge Graph</div>
+          <div class="sb-item-sub">Entity map</div>
+        </div>
+      </div>
+
+      <div class="sb-item" data-panel="chatindex" onclick="App.switchPanel('chatindex',this)">
+        <div class="sb-icon">◎</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">Chat Index</div>
+          <div class="sb-item-sub">Repo &amp; Docs RAG</div>
+        </div>
+      </div>
+
+      <div class="sb-item" data-panel="kb" onclick="App.switchPanel('kb',this)">
+        <div class="sb-icon">⬡</div>
+        <div class="sb-item-body">
+          <div class="sb-item-name">Knowledge Base</div>
+          <div class="sb-item-sub">PDF · URL · GitHub</div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sb-footer">
+      <div class="sb-progress-label">
+        <span id="pipeStatus">0 / 5 stages complete</span>
+        <span id="pipeRuntime" class="sb-runtime">—</span>
+      </div>
+      <div class="sb-progress-track">
+        <div class="sb-progress-fill" id="sbProgressFill" style="width:0%"></div>
+      </div>
+      <div class="sb-footer-meta">
+        <div class="sb-api-row">
+          <div class="sb-api-dot" id="apiStatus"></div>
+          <span id="modelName" class="sb-model">llama-3.3-70b</span>
+        </div>
+        <div class="sb-cost">
+          <span id="tokenCount">0 tokens</span>
+          <span class="sb-sep">·</span>
+          <span id="costEstimate">$0.000</span>
+        </div>
+        <div class="sb-rl-row" id="rlBudgetRow" style="display:none;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:0.06em;">TOKEN BUDGET</span>
+            <span id="rlPercent" style="font-family:var(--font-mono);font-size:9px;color:var(--muted);">0%</span>
+          </div>
+          <div style="height:3px;background:var(--border2);border-radius:2px;overflow:hidden;margin-top:3px;">
+            <div id="rlBar" style="height:100%;background:var(--green);border-radius:2px;width:0%;transition:width 0.4s ease;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:2px;">
+            <span id="rlRuns" style="font-family:var(--font-mono);font-size:9px;color:var(--muted);">0/10 runs</span>
+            <a href="/api/metrics" target="_blank" style="font-family:var(--font-mono);font-size:9px;color:var(--accent);text-decoration:none;">metrics →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN AREA ───────────────────────────────────────── -->
+  <div id="mainArea">
+
+    <!-- Top Bar -->
+    <header id="topBar">
+      <div class="tb-left">
+        <div id="projectPill" class="project-pill hidden">
+          <span class="pill-dot"></span>
+          <span id="pillName">project</span>
+          <span class="pill-sep">|</span>
+          <span id="pillPhase">IDLE</span>
+        </div>
+        <!-- keep model indicator element but empty — data shown in sidebar -->
+        <div id="modelIndicator"></div>
+      </div>
+      <div class="tb-right">
+        <button id="runPipelineBtn" onclick="App.runFullPipeline()" class="btn-run">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Run Pipeline
+        </button>
+        <button id="ghBtn" onclick="App.connectGitHub()" class="btn-outline">
+          <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span id="ghLabel">Connect GitHub</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- PANELS -->
+    <main id="appMain">
+
+      <!-- 01 VALIDATE -->
+      <section class="panel active" id="panel-validate">
+        <div class="panel-layout">
+          <div class="panel-left">
+            <div class="panel-left-header">
+              <h2 class="panel-title">Idea Validator</h2>
+              <p class="panel-subtitle">AI scores viability, market fit &amp; recommends a tech stack</p>
+            </div>
+            <div class="form-body">
+              <div class="field">
+                <label class="field-label">Your Idea</label>
+                <textarea class="inp" id="ideaInput" rows="5"
+                  placeholder="Describe your product idea. No technical detail needed — the agent handles that."></textarea>
+              </div>
+              <div class="field">
+                <label class="field-label">Target Audience</label>
+                <input class="inp" id="audienceInput" placeholder="e.g. Freelancers, Developers, SMBs…"/>
+              </div>
+              <div class="field">
+                <label class="field-label">Quick Start</label>
+                <div class="chip-row">
+                  <span class="chip" onclick="App.setExample('invoice','AI invoice + tax automation for freelancers','Freelancers')">Invoice SaaS</span>
+                  <span class="chip" onclick="App.setExample('review','GitHub PR code review assistant','Developers')">PR Reviewer</span>
+                  <span class="chip" onclick="App.setExample('nocode','No-code internal tool builder','Ops teams')">No-code tools</span>
+                </div>
+              </div>
+            </div>
+            <div class="panel-left-footer">
+              <label class="ctx-toggle">
+                <div class="toggle-track" id="ctx-validate" onclick="App.toggleCtx('validate',this)"><div class="toggle-thumb"></div></div>
+                <span class="toggle-label">Pipeline ctx</span>
+              </label>
+              <div class="footer-actions">
+                <button class="btn-primary" id="validateBtn" onclick="Agents.validate()">Validate Idea →</button>
+                <button class="btn-ghost" onclick="App.clearPanel('validate')">Clear</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-right">
+            <div class="panel-right-header">
+              <div id="validateStatusBadge" class="status-badge hidden">
+                <span class="badge-dot green"></span>Analysis Complete
+              </div>
+              <button class="btn-outline" id="proceedPrdBtn" onclick="App.switchPanel('prd')" style="display:none;">Next: PRD →</button>
+              <button class="btn-ghost" onclick="App.exportOutput('validate')">Export</button>
+            </div>
+            <div class="panel-right-body" id="validateOutput">
+              <div class="empty-state" id="validateEmpty">
+                <svg width="44" height="44" viewBox="0 0 52 52" fill="none" opacity="0.18" style="margin-bottom:12px;">
+                  <polygon points="26,3 49,15.5 49,36.5 26,49 3,36.5 3,15.5" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+                </svg>
+                <p class="empty-title">Awaiting idea input</p>
+                <p class="empty-sub">Agent will score viability, market fit &amp; suggest a tech stack</p>
+              </div>
+              <div id="validateResult" style="display:none;">
+                <div class="score-grid" id="scoreGrid"></div>
+                <div class="result-card"><div class="result-card-title">Quality Metrics</div><div id="metricBars"></div></div>
+                <div class="result-card"><div class="result-card-title">AI Analysis</div><div id="analysisText" class="analysis-body"></div></div>
+                <div class="result-card"><div class="result-card-title">Recommended Stack</div><div id="stackBadges" class="badge-row"></div></div>
+              </div>
+            </div>
+            <div class="log-drawer">
+              <div class="log-drawer-header">
+                <span class="log-title">Agent Log</span>
+                <span class="log-count" id="logcount-validate">0 events</span>
+              </div>
+              <div class="log-body" id="log-validate"><div class="log-idle">— idle —</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 PRD -->
+      <section class="panel" id="panel-prd">
+        <div class="panel-layout">
+          <div class="panel-left">
+            <div class="panel-left-header">
+              <h2 class="panel-title">PRD Generator</h2>
+              <p class="panel-subtitle">AI writes your full product requirements document</p>
+            </div>
+            <div class="form-body">
+              <div class="field">
+                <label class="field-label">Idea / Context</label>
+                <textarea class="inp" id="prdIdeaInput" rows="4" placeholder="Paste idea here, or enable Pipeline Context to auto-fill."></textarea>
+              </div>
+              <div class="field">
+                <label class="field-label">Sections to Generate</label>
+                <div class="checkbox-list">
+                  <label><input type="checkbox" checked data-section="overview"> Overview</label>
+                  <label><input type="checkbox" checked data-section="features"> Core Features</label>
+                  <label><input type="checkbox" checked data-section="stories"> User Stories</label>
+                  <label><input type="checkbox" checked data-section="tech"> Tech Requirements</label>
+                  <label><input type="checkbox" data-section="api"> API Spec</label>
+                  <label><input type="checkbox" data-section="timeline"> Timeline</label>
+                </div>
+              </div>
+            </div>
+            <div class="panel-left-footer">
+              <label class="ctx-toggle">
+                <div class="toggle-track on" id="ctx-prd" onclick="App.toggleCtx('prd',this)"><div class="toggle-thumb"></div></div>
+                <span class="toggle-label">Pipeline ctx</span>
+              </label>
+              <div class="footer-actions">
+                <button class="btn-primary" onclick="Agents.prd()">Generate PRD →</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel-right">
+            <div class="panel-right-header">
+              <button class="btn-outline" id="proceedScaffoldBtn" onclick="App.switchPanel('scaffold')" style="display:none;">Next: Scaffold →</button>
+              <button class="btn-ghost" onclick="App.exportOutput('prd','md')">Export MD</button>
+              <button class="btn-ghost" onclick="Export.downloadPdf()">Export PDF</button>
+            </div>
+            <div class="chat-refine-bar">
+              <input class="inp" id="prdChatInput" placeholder="Refine any section — e.g. 'Add mobile app to Core Features'…"/>
+              <button class="btn-primary" onclick="Agents.prdChat()">Send</button>
+            </div>
+            <div class="panel-right-body" id="prdOutput">
+              <div class="empty-state" id="prdEmpty"><p class="empty-title">Configure &amp; click Generate PRD</p></div>
+              <div id="prdSections" style="display:none;"></div>
+            </div>
+            <div class="log-drawer">
+              <div class="log-drawer-header"><span class="log-title">Agent Log</span><span class="log-count" id="logcount-prd">0 events</span></div>
+              <div class="log-body" id="log-prd"><div class="log-idle">— idle —</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 SCAFFOLD -->
+      <section class="panel" id="panel-scaffold">
+        <div class="panel-layout">
+          <div class="panel-left">
+            <div class="panel-left-header">
+              <h2 class="panel-title">Code Scaffold</h2>
+              <p class="panel-subtitle">Generate full repo structure &amp; push to GitHub</p>
+            </div>
+            <div class="form-body">
+              <div class="field">
+                <label class="field-label">Repo Name</label>
+                <input class="inp" id="repoNameInput" placeholder="my-project"/>
+              </div>
+              <div class="field">
+                <label class="field-label">Stack Override</label>
+                <input class="inp" id="stackOverride" placeholder="Leave blank to use Validator suggestion"/>
+              </div>
+              <div class="field">
+                <label class="field-label">Structure</label>
+                <div class="radio-list">
+                  <label><input type="radio" name="structure" value="monorepo" checked> Monorepo</label>
+                  <label><input type="radio" name="structure" value="separate"> Frontend + Backend separate</label>
+                  <label><input type="radio" name="structure" value="microservices"> Microservices</label>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Generated Files</label>
+                <div id="fileTree" class="file-tree"><div class="mono-sm muted">— run generator —</div></div>
+              </div>
+            </div>
+            <div class="panel-left-footer">
+              <label class="ctx-toggle">
+                <div class="toggle-track on" id="ctx-scaffold" onclick="App.toggleCtx('scaffold',this)"><div class="toggle-thumb"></div></div>
+                <span class="toggle-label">Pipeline ctx</span>
+              </label>
+              <div class="footer-actions">
+                <button class="btn-primary" onclick="Agents.scaffold()">Generate + Push →</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel-right">
+            <div class="panel-right-header">
+              <button class="btn-outline" id="proceedCicdBtn" onclick="App.switchPanel('cicd')" style="display:none;">Next: CI/CD →</button>
+              <button class="btn-ghost" onclick="App.switchPanel('diagram')">Full Diagram →</button>
+              <button class="btn-outline" onclick="Export.downloadZip()">⬇ Download ZIP</button>
+            </div>
+            <div class="panel-right-body canvas-body">
+              <div id="scaffoldD3Container" style="width:100%;height:100%;"></div>
+            </div>
+            <div class="log-drawer">
+              <div class="log-drawer-header"><span class="log-title">Build Log</span><span class="log-count" id="logcount-scaffold">0 events</span></div>
+              <div class="log-body" id="log-scaffold"><div class="log-idle">— idle —</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 CI/CD -->
+      <section class="panel" id="panel-cicd">
+        <div class="panel-layout">
+          <div class="panel-left">
+            <div class="panel-left-header">
+              <h2 class="panel-title">CI/CD Monitor</h2>
+              <p class="panel-subtitle">Live GitHub Actions pipeline &amp; AI auto-fix</p>
+            </div>
+            <div class="form-body">
+              <div class="field">
+                <label class="field-label">Repo URL</label>
+                <input class="inp" id="repoUrlInput" placeholder="github.com/user/repo"/>
+              </div>
+              <div class="field">
+                <label class="field-label">Branch</label>
+                <input class="inp" id="branchInput" value="main"/>
+              </div>
+              <div class="field">
+                <label class="field-label">Watch Mode</label>
+                <div class="radio-list">
+                  <label><input type="radio" name="watchmode" value="live" checked> Live stream</label>
+                  <label><input type="radio" name="watchmode" value="poll"> Poll every 30s</label>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Stage Status</label>
+                <div class="status-grid" id="cicdStatusGrid">
+                  <div class="status-cell"><div class="sc-label">BUILD</div><div class="sc-val" id="st-build">—</div></div>
+                  <div class="status-cell"><div class="sc-label">TESTS</div><div class="sc-val" id="st-tests">—</div></div>
+                  <div class="status-cell"><div class="sc-label">LINT</div><div class="sc-val" id="st-lint">—</div></div>
+                  <div class="status-cell"><div class="sc-label">DEPLOY</div><div class="sc-val" id="st-deploy">—</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-left-footer">
+              <div class="footer-actions" style="width:100%;">
+                <button class="btn-primary" style="width:100%;" onclick="Agents.cicd()">Watch Pipeline</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel-right">
+            <div class="panel-right-header">
+              <div id="autoFixBanner" class="autofix-banner hidden">
+                <span class="autofix-label">⚠ Failure detected</span>
+                <button class="btn-danger" onclick="Agents.autoFix()">Auto-Fix →</button>
+              </div>
+            </div>
+            <div class="panel-right-body mono-log" id="cicdLog">
+              <span class="muted mono-sm">— connect a repo and click Watch Pipeline —</span>
+            </div>
+            <div class="log-drawer">
+              <div class="log-drawer-header"><span class="log-title">Agent Log</span><span class="log-count" id="logcount-cicd">0 events</span></div>
+              <div class="log-body" id="log-cicd"><div class="log-idle">— idle —</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 LAUNCH -->
+      <section class="panel" id="panel-launch">
+        <div class="panel-layout">
+          <div class="panel-left">
+            <div class="panel-left-header">
+              <h2 class="panel-title">Launch Checklist</h2>
+              <p class="panel-subtitle">AI-generated pre-launch readiness checklist</p>
+            </div>
+            <div class="form-body">
+              <div class="field">
+                <label class="field-label">Project Context</label>
+                <textarea class="inp" rows="3" id="launchCtxInput" placeholder="Describe your project or enable Pipeline Context"></textarea>
+              </div>
+              <div class="field">
+                <label class="field-label">Checklist Focus</label>
+                <div class="checkbox-list">
+                  <label><input type="checkbox" checked data-focus="security"> Security</label>
+                  <label><input type="checkbox" checked data-focus="performance"> Performance</label>
+                  <label><input type="checkbox" checked data-focus="seo"> SEO &amp; Marketing</label>
+                  <label><input type="checkbox" checked data-focus="devops"> DevOps &amp; Deploy</label>
+                  <label><input type="checkbox" data-focus="legal"> Legal &amp; Compliance</label>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Progress</label>
+                <div class="progress-row">
+                  <span class="progress-num" id="checkDone">0</span>
+                  <div style="flex:1;">
+                    <div class="metric-bar-track"><div class="metric-bar-fill" id="checkBar" style="width:0%;"></div></div>
+                    <div class="mono-sm muted" id="checkLabel">of 0 complete</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-left-footer">
+              <label class="ctx-toggle">
+                <div class="toggle-track on" id="ctx-launch" onclick="App.toggleCtx('launch',this)"><div class="toggle-thumb"></div></div>
+                <span class="toggle-label">Pipeline ctx</span>
+              </label>
+              <div class="footer-actions">
+                <button class="btn-primary" onclick="Agents.launch()">Generate Checklist →</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel-right">
+            <div class="panel-right-header">
+              <span class="muted" style="font-size:13px;">Check items as you complete them</span>
+            </div>
+            <div class="panel-right-body" id="launchOutput">
+              <div class="empty-state" id="launchEmpty"><p class="empty-title">Click Generate Checklist to begin</p></div>
+              <div id="checklistItems" style="display:none;"></div>
+            </div>
+            <div class="log-drawer">
+              <div class="log-drawer-header"><span class="log-title">Agent Log</span><span class="log-count" id="logcount-launch">0 events</span></div>
+              <div class="log-body" id="log-launch"><div class="log-idle">— idle —</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARCHITECTURE DIAGRAM -->
+      <section class="panel visual-panel" id="panel-diagram">
+        <div class="visual-topbar">
+          <h2 class="panel-title">Architecture Diagram</h2>
+          <div class="tb-right">
+            <button class="btn-ghost" onclick="App.exportDiagram('svg')">Export SVG</button>
+            <button class="btn-ghost" onclick="App.exportDiagram('png')">Export PNG</button>
+          </div>
+        </div>
+        <div class="diagram-prompt-bar">
+          <input class="inp" id="diagramPrompt" placeholder="Ask AI to modify: e.g. 'Add a Redis cache between API and database'…"/>
+          <button class="btn-primary" onclick="Agents.modifyDiagram()">Apply</button>
+        </div>
+        <div class="canvas-container">
+          <div id="archD3Container" style="width:100%;height:100%;"></div>
+        </div>
+      </section>
+
+      <!-- KNOWLEDGE GRAPH -->
+      <section class="panel visual-panel" id="panel-graph">
+        <div class="visual-topbar" style="display:flex;align-items:center;justify-content:space-between;">
+          <h2 class="panel-title" id="graphPanelTitle">Knowledge Graph — Entity Relationship</h2>
+          <select id="graphModeSelect" onchange="Canvas.switchGraphMode(this.value)"
+            style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);
+                   font-family:var(--font-mono);font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;outline:none;">
+            <option value="erd">ERD — Entity Relationship</option>
+            <option value="lld">LLD — Class Diagram</option>
+            <option value="sequence">Sequence Diagram</option>
+            <option value="component">Component Diagram</option>
+            <option value="deployment">Deployment View</option>
+          </select>
+        </div>
+        <div class="canvas-container">
+          <canvas id="graphCanvas"></canvas>
+        </div>
+      </section>
+
+
+      <!-- ══ KNOWLEDGE BASE ══════════════════════════════════════════════ -->
+      <section class="panel visual-panel" id="panel-kb">
+        <div class="visual-topbar">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <h2 class="panel-title">Knowledge Base</h2>
+            <div id="kb-status" style="font-family:var(--font-mono);font-size:11px;color:var(--muted);"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;color:var(--text2);">
+              <div class="toggle-track" id="kb-inject-toggle" onclick="KB.toggleInject(this)">
+                <div class="toggle-thumb"></div>
+              </div>
+              <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;">INJECT INTO AGENTS</span>
+            </label>
+          </div>
+        </div>
+        <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);">
+          <button id="kb-tab-pdf"    onclick="KB.tab('pdf')"    class="kb-tab active-tab">PDF</button>
+          <button id="kb-tab-url"    onclick="KB.tab('url')"    class="kb-tab">URL</button>
+          <button id="kb-tab-github" onclick="KB.tab('github')" class="kb-tab">GITHUB</button>
+          <div style="flex:1;"></div>
+          <div id="kb-tree-info" style="padding:0 14px;display:flex;align-items:center;font-size:10px;font-family:var(--font-mono);color:var(--muted);gap:8px;"></div>
+        </div>
+        <div style="display:flex;flex:1;overflow:hidden;min-height:0;">
+          <div style="width:300px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);">
+            <div id="kb-src-pdf" style="flex:1;display:flex;flex-direction:column;gap:12px;padding:16px;overflow-y:auto;">
+              <div style="font-size:11px;color:var(--text2);line-height:1.6;">Upload any PDF — spec, architecture doc, research paper, manual. PageIndex will build a hierarchical tree from it.</div>
+              <div id="kb-drop-zone" onclick="document.getElementById('kb-file-input').click()"
+                style="border:2px dashed var(--border2);border-radius:8px;padding:24px 16px;text-align:center;cursor:pointer;transition:border-color .2s;flex-shrink:0;"
+                ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+                ondragleave="this.style.borderColor='var(--border2)'"
+                ondrop="KB.handleDrop(event)">
+                <div style="font-size:24px;margin-bottom:8px;">📄</div>
+                <div style="font-size:12px;color:var(--text2);">Drop PDF here or click to browse</div>
+                <div id="kb-file-name" style="font-size:10px;color:var(--accent);margin-top:6px;font-family:var(--font-mono);"></div>
+              </div>
+              <input id="kb-file-input" type="file" accept=".pdf" style="display:none" onchange="KB.handleFileSelect(this)"/>
+              <button id="kb-pdf-btn" class="btn-primary" onclick="KB.indexPdf()" disabled>Index with PageIndex →</button>
+            </div>
+            <div id="kb-src-url" style="flex:1;display:none;flex-direction:column;gap:12px;padding:16px;overflow-y:auto;">
+              <div style="font-size:11px;color:var(--text2);line-height:1.6;">Paste any URL — framework docs, ReadTheDocs, blog post, RFC.</div>
+              <input id="kb-url-input" class="inp" placeholder="https://fastapi.tiangolo.com/tutorial/" onkeydown="if(event.key==='Enter')KB.indexUrl()"/>
+              <button class="btn-primary" onclick="KB.indexUrl()">Scrape &amp; Index →</button>
+            </div>
+            <div id="kb-src-github" style="flex:1;display:none;flex-direction:column;gap:12px;padding:16px;overflow-y:auto;">
+              <div style="font-size:11px;color:var(--text2);line-height:1.6;">Point to a GitHub docs folder. Fetches up to 20 markdown files.</div>
+              <input id="kb-gh-url" class="inp" placeholder="github.com/tiangolo/fastapi/tree/master/docs/en/docs"/>
+              <button class="btn-primary" onclick="KB.indexGithub()">Fetch &amp; Index →</button>
+            </div>
+            <div style="border-top:1px solid var(--border);flex-shrink:0;">
+              <div style="padding:8px 14px;font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.08em;display:flex;justify-content:space-between;align-items:center;">
+                <span>PAGEINDEX TREE</span>
+                <span id="kb-node-count" style="color:var(--accent)"></span>
+              </div>
+              <pre id="kb-tree-preview" style="font-size:9px;color:var(--text2);max-height:200px;overflow:auto;padding:0 14px 12px;line-height:1.6;white-space:pre-wrap;font-family:var(--font-mono);margin:0;"></pre>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;">
+            <div id="kb-msgs" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:16px;"></div>
+            <div style="display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);">
+              <input id="kb-q" class="inp" style="flex:1;" placeholder="Ask anything about the indexed document…" onkeydown="if(event.key==='Enter')KB.ask()"/>
+              <button class="btn-primary" onclick="KB.ask()">Ask</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHAT INDEX -->
+      <section class="panel visual-panel" id="panel-chatindex">
+        <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);">
+          <button id="ci-tab-repo" onclick="ChatIndex.tab('repo')" style="flex:1;padding:12px;background:none;border:none;border-bottom:2px solid var(--accent);color:var(--accent);font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;cursor:pointer;transition:all .15s;">REPO CHAT</button>
+          <button id="ci-tab-docs" onclick="ChatIndex.tab('docs')" style="flex:1;padding:12px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;cursor:pointer;transition:all .15s;">DOCS <span style="font-size:9px;opacity:.7;">(PageIndex)</span></button>
+          <div id="ci-status" style="padding:0 14px;display:flex;align-items:center;font-size:11px;font-family:var(--font-mono);color:var(--muted);min-width:120px;"></div>
+        </div>
+        <div id="ci-repo" style="flex:1;display:flex;flex-direction:column;gap:10px;padding:16px;overflow:hidden;">
+          <div style="display:flex;gap:8px;flex-shrink:0;">
+            <input id="ci-repo-url" class="inp" style="flex:1;" placeholder="github.com/owner/repo"/>
+            <input id="ci-repo-branch" class="inp" style="width:80px;" value="main"/>
+            <button id="ci-repo-index-btn" class="btn-primary" onclick="ChatIndex.repoIndex()">Index</button>
+          </div>
+          <details style="flex-shrink:0;">
+            <summary style="font-size:11px;font-family:var(--font-mono);color:var(--muted);cursor:pointer;user-select:none;">File tree ▾</summary>
+            <pre id="ci-repo-tree" style="font-size:10px;color:var(--muted);max-height:140px;overflow:auto;margin:6px 0 0;padding:8px;background:var(--surface2);border-radius:6px;"></pre>
+          </details>
+          <div id="ci-repo-msgs" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;min-height:0;"></div>
+          <div style="display:flex;gap:8px;flex-shrink:0;">
+            <input id="ci-repo-q" class="inp" style="flex:1;" placeholder="Ask about the codebase…" onkeydown="if(event.key==='Enter')ChatIndex.repoAsk()"/>
+            <button class="btn-primary" onclick="ChatIndex.repoAsk()">Ask</button>
+          </div>
+        </div>
+        <div id="ci-docs" style="flex:1;display:none;flex-direction:column;gap:10px;padding:16px;overflow:hidden;">
+          <div style="display:flex;gap:8px;flex-shrink:0;">
+            <input id="ci-docs-url" class="inp" style="flex:1;" placeholder="github.com/owner/repo/tree/main/docs"/>
+            <button id="ci-docs-index-btn" class="btn-primary" onclick="ChatIndex.docsIndex()">Index Docs</button>
+          </div>
+          <div id="ci-docs-hint" style="font-size:11px;color:var(--muted);font-family:var(--font-mono);flex-shrink:0;min-height:16px;"></div>
+          <div id="ci-docs-msgs" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;min-height:0;"></div>
+          <div style="display:flex;gap:8px;flex-shrink:0;">
+            <input id="ci-docs-q" class="inp" style="flex:1;" placeholder="Ask about the docs…" onkeydown="if(event.key==='Enter')ChatIndex.docsAsk()"/>
+            <button class="btn-primary" onclick="ChatIndex.docsAsk()">Ask</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ERROR TOAST -->
+<div id="errorToast" class="error-toast hidden">
+  <span id="errorMsg"></span>
+  <button onclick="App.dismissError()">✕</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="app.js"></script>
+<script>
+const BOOT_LINES = [
+  { t:'sys',  m:'Initializing FORGE runtime…' },
+  { t:'ok',   m:'✓ LLM pipeline connected' },
+  { t:'ok',   m:'✓ Agent modules loaded' },
+  { t:'ok',   m:'✓ GitHub integration ready' },
+  { t:'info', m:'→ Checking API health…' },
+];
+async function runLaunchBoot() {
+  const c = document.getElementById('lsBoot');
+  for (let i = 0; i < BOOT_LINES.length; i++) {
+    await new Promise(r => setTimeout(r, 300 + i * 100));
+    const d = document.createElement('div');
+    d.className = 'boot-line ' + BOOT_LINES[i].t;
+    d.textContent = BOOT_LINES[i].m;
+    c.appendChild(d);
+  }
+  await new Promise(r => setTimeout(r, 280));
+  const btn = document.getElementById('lsStartBtn');
+  btn.disabled = false;
+  btn.classList.add('ready');
+  document.getElementById('lsStartTxt').textContent = 'Start Building';
+}
+function startApp() {
+  const ls = document.getElementById('launchScreen');
+  ls.classList.add('hiding');
+  setTimeout(() => {
+    ls.style.display = 'none';
+    document.getElementById('appShell').classList.add('visible');
+    if (typeof App !== 'undefined') App.checkApiHealth();
+  }, 580);
+}
+window.addEventListener('load', runLaunchBoot);
+</script>
+</body>
+</html>
