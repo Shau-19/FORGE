@@ -140,7 +140,7 @@ def handle_knowledge_generate(body: dict) -> dict:
         raise ValueError(f"diagram_type must be one of: {list(DIAGRAM_TYPES.keys())}")
 
     system, user = _make_prompt(idea, stack, prd, diagram_type)
-    result = llm.call(prompt=user, system=system, max_tokens=1200)
+    result = llm.call(prompt=user, system=system, max_tokens=1200, agent='knowledge')
 
     # Clean up — strip any markdown fences the model might have added anyway
     import re

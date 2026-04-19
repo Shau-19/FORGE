@@ -52,7 +52,7 @@ Rules:
 - No placeholders — real implementation details
 - Return ONLY the JSON object"""
 
-    result = llm.call(prompt=user, system=system, max_tokens=1200)
+    result = llm.call(prompt=user, system=system, max_tokens=1200, agent='doit')
     text = result['text'].strip()
 
     # Strip markdown fences

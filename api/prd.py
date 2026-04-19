@@ -1,4 +1,3 @@
-
 import os, sys, json
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from core import llm, prompts
@@ -19,7 +18,7 @@ def handle_prd(body: dict) -> dict:
         raise ValueError('idea too short')
 
     system, user = prompts.generate_prd(idea, audience, stack, sections)
-    result = llm.call(prompt=user, system=system, max_tokens=1600)
+    result = llm.call(prompt=user, system=system, max_tokens=1600, agent='prd')
 
     try:
         parsed = _parse_json(result['text'])
@@ -44,7 +43,7 @@ def handle_prd_refine(body: dict) -> dict:
         raise ValueError('instruction required')
 
     system, user = prompts.refine_prd_section(section_label, current_content, instruction)
-    result = llm.call(prompt=user, system=system, max_tokens=700)
+    result = llm.call(prompt=user, system=system, max_tokens=700, agent='prd_refine')
     return {
         'section_key':     section_key,
         'updated_content': result['text'],

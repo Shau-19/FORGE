@@ -130,6 +130,8 @@ def handle_cicd_watch(body: dict) -> dict:
                                     failure_log += f"Job '{job['name']}' failed (no errors captured)\n"
                             else:
                                 # Python fallback
+                                # KEY FIX: store file contents so autofix LLM patches REAL lines
+                                file_contents = {}
                                 for fpath in py_files:
                                     try:
                                         fd = _gh_get(gh_token, f'/repos/{repo}/contents/{fpath}?ref={branch}')
@@ -137,7 +139,14 @@ def handle_cicd_watch(body: dict) -> dict:
                                         dest = _osf.path.join(tmpdir, fpath)
                                         _osf.makedirs(_osf.path.dirname(dest), exist_ok=True)
                                         open(dest,'w').write(code)
+                                        file_contents[fpath] = code
                                     except Exception: continue
+                                # Append actual file contents to failure_log
+                                # This is CRITICAL — without this, autofix hallucinates function names
+                                if file_contents:
+                                    failure_log += "\n=== ACTUAL FILE CONTENTS (for patch generation) ===\n"
+                                    for fpath, code in file_contents.items():
+                                        failure_log += f"\n--- {fpath} ---\n{code[:3000]}\n"
                                 proc = subprocess.run(['ruff','check','.'], cwd=tmpdir,
                                                       capture_output=True, text=True, timeout=30)
                                 ruff_out = (proc.stdout + proc.stderr).strip()

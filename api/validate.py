@@ -20,7 +20,7 @@ def handle_validate(body: dict) -> dict:
         raise ValueError('idea must be at least 5 characters')
 
     system, user = prompts.validate_idea(idea, audience)
-    result = llm.call(prompt=user, system=system, max_tokens=900)
+    result = llm.call(prompt=user, system=system, max_tokens=900, agent='validator')
 
     try:
         p = _parse_json(result['text'])

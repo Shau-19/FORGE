@@ -22,7 +22,7 @@ def handle_checklist(body: dict) -> dict:
         raise ValueError('idea required')
 
     system, user = prompts.generate_checklist(idea, stack, focus)
-    result = llm.call(prompt=user, system=system, max_tokens=1000)
+    result = llm.call(prompt=user, system=system, max_tokens=1000, agent='checklist')
 
     try:
         parsed = _parse_json(result['text'])

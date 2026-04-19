@@ -31,7 +31,7 @@ def handle_diagram_modify(body: dict) -> dict:
         raise ValueError('instruction required')
 
     system, user = prompts.modify_diagram(nodes, edges, instruction, stack)
-    result = llm.call(prompt=user, system=system, max_tokens=1000)
+    result = llm.call(prompt=user, system=system, max_tokens=1000, agent='diagram')
 
     text = result['text'].strip()
     if text.startswith('```'):

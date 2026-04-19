@@ -448,7 +448,7 @@ const Agents = {
 
     let data;
     try {
-      data = await LLM.call('validate', { idea, audience });
+      data = await LLM.call('validate', { idea, audience, kb_context: _getKBContext() });
     } catch (err) {
       Log.write('validate', 'Error: ' + err.message, 'err');
       App.showError('Validation failed: ' + err.message);
@@ -525,7 +525,7 @@ const Agents = {
 
     let data;
     try {
-      data = await LLM.call('prd', { idea, audience:S.project.audience||'General', stack:S.project.techStack||[], sections });
+      data = await LLM.call('prd', { idea, audience:S.project.audience||'General', stack:S.project.techStack||[], sections, kb_context: _getKBContext() });
     } catch (err) {
       Log.write('prd', 'Error: ' + err.message, 'err');
       App.showError('PRD failed: ' + err.message);
@@ -608,7 +608,7 @@ const Agents = {
 
     let data;
     try {
-      data = await LLM.call('scaffold', { name, stack, structure, idea:S.project.idea, prd:S.project.prd, github_token:S.github.connected?S.github.token:'', private:false });
+      data = await LLM.call('scaffold', { name, stack, structure, idea:S.project.idea, prd:S.project.prd, github_token:S.github.connected?S.github.token:'', private:false, kb_context: _getKBContext() });
     } catch (err) {
       Log.write('scaffold', 'Failed: ' + err.message, 'err');
       App.showError('Scaffold failed: ' + err.message);
@@ -2514,10 +2514,11 @@ const ChatIndex = (() => {
 
 // ── KB context injector — appended to agent payloads when inject is ON ──────
 function _getKBContext() {
-  if (!S.kb || !S.kb.active || !S.kb.tree_text) return null;
+  if (!S.kb || !S.kb.active || !S.kb.tree) return null;
   return {
-    kb_tree_text: S.kb.tree_text.slice(0, 3000),
-    kb_label:     S.kb.label,
+    tree:      S.kb.tree,
+    tree_text: S.kb.tree_text ? S.kb.tree_text.slice(0, 3000) : '',
+    source:    S.kb.label || '',
   };
 }
 

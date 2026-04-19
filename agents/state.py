@@ -1,39 +1,40 @@
 """
 agents/state.py — FORGE Pipeline State
-Defines the shared state that flows through all LangGraph agent nodes.
 """
 from typing import TypedDict, Optional, Any
 
 
 class ForgeState(TypedDict):
-    """
-    Single shared state object passed between all pipeline agents.
-    Each agent reads what it needs and writes its output back to state.
-    """
     # ── Inputs ──────────────────────────────────────────────
-    idea:       str                    # Raw product idea from user
-    audience:   str                    # Target audience
-    stack:      list[str]              # Tech stack (set by validator, used downstream)
-    structure:  str                    # Scaffold structure: monorepo | separate | microservices
-    sections:   list[str]              # PRD sections requested
+    idea:       str
+    audience:   str
+    stack:      list[str]
+    structure:  str
+    sections:   list[str]
 
     # ── Agent outputs ────────────────────────────────────────
-    validation: Optional[dict]         # Output of ValidatorAgent
-    prd:        Optional[dict]         # Output of PRDAgent
-    scaffold:   Optional[dict]         # Output of ScaffoldAgent
-    checklist:  Optional[dict]         # Output of ChecklistAgent
-    cicd:       Optional[dict]         # Output of CICDAgent
+    validation: Optional[dict]
+    prd:        Optional[dict]
+    scaffold:   Optional[dict]
+    checklist:  Optional[dict]
+    cicd:       Optional[dict]
 
     # ── Pipeline metadata ────────────────────────────────────
-    project_name:   str                # Derived from idea
-    current_stage:  str                # Which stage is active
-    completed:      list[str]          # Which stages are done
-    errors:         list[str]          # Any errors encountered
-    tokens_total:   int                # Cumulative token usage
-    cost_estimate:  float              # Estimated cost in USD
+    project_name:   str
+    current_stage:  str
+    completed:      list[str]
+    errors:         list[str]
+    tokens_total:   int
+    cost_estimate:  float
 
     # ── Optional overrides ───────────────────────────────────
     github_token:   Optional[str]
+    repo_url:       Optional[str]
     repo_name:      Optional[str]
     diagram_nodes:  Optional[list]
     diagram_edges:  Optional[list]
+
+    # ── KB injection ─────────────────────────────────────────
+    # Set by frontend when "Inject into Agents" toggle is ON.
+    # Shape: { tree, tree_text, source, doc_id?, url? }
+    kb_context:     Optional[dict]

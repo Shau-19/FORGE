@@ -1,7 +1,6 @@
-"""
-agents/validator.py — Idea Validator Agent
-Node 1 in the FORGE LangGraph pipeline.
-"""
+
+"""agents/validator.py — Idea Validator Agent"""
+import re
 from agents.base import BaseAgent
 from agents.state import ForgeState
 from core import prompts
@@ -11,27 +10,22 @@ class ValidatorAgent(BaseAgent):
     name = "validator"
 
     def run(self, state: ForgeState) -> dict:
-        idea     = state["idea"].strip()
-        audience = state.get("audience", "General") or "General"
+        idea       = state["idea"].strip()
+        audience   = state.get("audience", "General") or "General"
+        kb_context = state.get("kb_context")  # injected if toggle ON
 
         if len(idea) < 5:
             raise ValueError("Idea must be at least 5 characters")
 
-        system, user = prompts.validate_idea(idea, audience)
+        system, user = prompts.validate_idea(idea, audience, kb_context=kb_context)
         result = self.llm_call(user, system=system, max_tokens=900)
         p = self.parse_json(result["text"])
 
         m = p.get("metrics", {})
         a = p.get("analysis", {})
-        stack = list(p.get("stack", ["FastAPI", "React", "PostgreSQL"]))[:8]
+        stack = list(p.get("stack", ["FastAPI", "Python"]))[:8]
 
-        # Derive project name from idea
-        #project_name = (
-        #    idea.split(" ")[:3]
-        #    .__class__(idea.split(" ")[:3])
-        #)
         project_name = "-".join(idea.split()[:3]).lower()
-        import re
         project_name = re.sub(r"[^a-z0-9-]", "", project_name)
 
         validation = {
